@@ -20,17 +20,17 @@
       var quarantined = $('td.actions a.quarantine-action.quarantined').map(mapEl).toArray()
       var faileded = $('td.actions a.quarantine-action:not(.quarantined)').map(mapEl).toArray()
       
-      if (failed.length > 0 && window.confirm('Found ' + failed.length() + ' new failed test(s). Quarantine all?')) {
+      if (failed.length > 0 && window.confirm('Found ' + failed.length + ' new failed test(s). Quarantine all?')) {
         quarantine(failed);
       }
       
-      if (quarantined.length > 0 && window.confirm('Found ' + quarantined.length() + ' quarantined test(s). Resume all?')) {
+      if (quarantined.length > 0 && window.confirm('Found ' + quarantined.length + ' quarantined test(s). Resume all?')) {
         resume(quarantined);
       }
   } else if (window.location.pathname.match(/^\/browse\/[A-Z0-9-]+\/quarantine$/)) {
       var quarantined = $('td.actions a.unleash-test').map(mapEl).toArray()
       
-      if (quarantined.length > 0 && window.confirm('Found ' + quarantined.length() + ' quarantined test(s). Resume all?')) {
+      if (quarantined.length > 0 && window.confirm('Found ' + quarantined.length + ' quarantined test(s). Resume all?')) {
         resume(quarantined);
       }
   } else {
