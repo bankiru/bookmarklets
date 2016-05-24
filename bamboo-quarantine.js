@@ -1,4 +1,4 @@
-if (window.location.host != 'bamboo.devbanki.ru') {
+if (!window.location.host.math(/^bamboo\.(dev)?banki\.ru$/)) {
   alert('Domain ' + window.location.host + ' unsupported');
 } else if (window.location.pathname.match(/^\/browse\/[A-Z0-9-]+\/test$/)) {
   (function($){
