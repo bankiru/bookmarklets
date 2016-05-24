@@ -1,4 +1,4 @@
-(function(){
+(function($){
   var mapEl = function(){
     return {
       plan_key: $(this).data("plan-key"),
