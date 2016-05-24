@@ -1,6 +1,9 @@
 # kloaka
 
-## bamboo quarantine
-Add bookmarklet
+## Bamboo quarantine/resume bookmarklet
 
-[Bamboo Quarantine/Resume](javascript:var%20s%20=%20document.createElement('script');s.type='text/javascript';document.body.appendChild(s);s.src='//bankiru.github.io/kloaka/bamboo-quarantine.js';void(0);)
+Create in your browser new bookmark with next address:
+
+```
+javascript:var%20s%20=%20document.createElement('script');s.type='text/javascript';document.body.appendChild(s);s.src='//bankiru.github.io/kloaka/bamboo-quarantine.js';void(0);
+```
