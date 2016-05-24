@@ -9,8 +9,7 @@
   var doRequest = function(action, tests) {
     $.each(tests, function(i, test){
       console.log(action, test.planKey, test.testId);
-      // $.ajax({
-      console.log('ajax', {
+      $.ajax({
         url: window.location.origin + '/rest/api/latest/plan/' + test.planKey + '/test/' + test.testId + '/' + action,
         type:"POST",
         contentType:"application/json; charset=utf-8",
