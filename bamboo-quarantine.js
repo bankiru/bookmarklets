@@ -32,7 +32,7 @@
     alert('Domain ' + window.location.host + ' unsupported');
   } else if (window.location.pathname.match(/^\/browse\/[A-Z0-9-]+\/test$/)) {
       var quarantined = $('td.actions a.quarantine-action.quarantined').map(mapEl).toArray()
-      var faileded = $('td.actions a.quarantine-action:not(.quarantined)').map(mapEl).toArray()
+      var failed = $('td.actions a.quarantine-action:not(.quarantined)').map(mapEl).toArray()
       
       if (failed.length > 0 && window.confirm('Found ' + failed.length + ' new failed test(s). Quarantine all?')) {
         quarantine(failed);
