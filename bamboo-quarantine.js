@@ -1,17 +1,31 @@
 (function($){
   var mapEl = function(){
     return {
-      plan_key: $(this).data("plan-key"),
-      test_id: $(this).data("test-id")
+      planKey: $(this).data("plan-key"),
+      testId: $(this).data("test-id")
     }
   }
   
+  var doRequest = function(action, tests) {
+    $.each(tests, function(i, test){
+      console.log(action, test.planKey, test.testId);
+      // $.ajax({
+      console.log('ajax', {
+        url: window.location.origin + '/rest/api/latest/plan/' + test.planKey + '/test/' + test.testId + '/' + action,
+        type:"POST",
+        contentType:"application/json; charset=utf-8",
+        dataType:"json",
+        data:"{}",
+      });
+    });
+  }
+  
   var quarantine = function(tests) {
-    console.log('quarantine', tests)
+    doRequest('quarantine', tests)
   }
   
   var resume = function(tests) {
-    console.log('resume', tests)
+    doRequest('resume', tests)
   }
   
   if (!window.location.host.match(/^bamboo\.(dev)?banki\.ru$/)) {
