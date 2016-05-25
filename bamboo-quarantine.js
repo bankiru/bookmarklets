@@ -6,7 +6,7 @@
     }
   }
   
-  var doRequest = function(action, tests) {
+  var doRequests = function(action, tests) {
     $.each(tests, function(i, test){
       console.log(action, test.planKey, test.testId);
       $.ajax({
@@ -19,14 +19,6 @@
     });
   }
   
-  var quarantine = function(tests) {
-    doRequest('quarantine', tests)
-  }
-  
-  var resume = function(tests) {
-    doRequest('resume', tests)
-  }
-  
   if (!window.location.host.match(/^bamboo\.(dev)?banki\.ru$/)) {
     alert('Domain ' + window.location.host + ' unsupported');
   } else if (window.location.pathname.match(/^\/browse\/[A-Z0-9-]+\/test$/)) {
@@ -34,17 +26,17 @@
       var failed = $('td.actions a.quarantine-action:not(.quarantined)').map(mapEl).toArray()
       
       if (failed.length > 0 && window.confirm('Found ' + failed.length + ' new failed test(s). Quarantine all?')) {
-        quarantine(failed);
+        doRequests('quarantine', failed);
       }
       
       if (quarantined.length > 0 && window.confirm('Found ' + quarantined.length + ' quarantined test(s). Resume all?')) {
-        resume(quarantined);
+        doRequests('resume', quarantined);
       }
   } else if (window.location.pathname.match(/^\/browse\/[A-Z0-9-]+\/quarantine$/)) {
       var quarantined = $('td.actions a.unleash-test').map(mapEl).toArray()
       
       if (quarantined.length > 0 && window.confirm('Found ' + quarantined.length + ' quarantined test(s). Resume all?')) {
-        resume(quarantined);
+        doRequests('resume', quarantined);
       }
   } else {
     alert('Location ' + window.location.pathname + ' unsupported');
