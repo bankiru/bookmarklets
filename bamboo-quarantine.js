@@ -55,8 +55,8 @@
       });
   }
 
-  if (!window.location.host.match(/^bamboo\.(dev)?banki\.ru$/)) {
-    alert('Domain ' + window.location.host + ' unsupported');
+  if (!$('.aui-header-logo-bamboo').length)) {
+    alert('You are not on bamboo page =(');
   } else if (window.location.pathname.match(/^\/browse\/[A-Z0-9-]+\/test$/)) {
       var quarantined = $('td.actions a.quarantine-action.quarantined').map(mapEl).toArray()
       var failed = $('td.actions a.quarantine-action:not(.quarantined)').map(mapEl).toArray()
