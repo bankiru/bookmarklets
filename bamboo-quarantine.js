@@ -112,7 +112,7 @@
         progressMsgEl.hide();
         progressMsgEl.detach();
 
-        var msgText = '<p>You should manually reload page to see changes!</p>';
+        var msgText = AJS.format('<p>You should manually reload page to see changes!</p><p><a href="{0}">Reload</a></p>', window.location.href);
         if (rejectedCount > 0) {
           msgText = AJS.format('<p>{0} of {1} api requests failed. See console log for details.</p>', rejectedCount, totalCount) + msgText;
         }
