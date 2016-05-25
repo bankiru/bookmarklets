@@ -1,11 +1,9 @@
 (function($){
-  var mapEl = function(){
-    return {
-      planKey: $(this).data("plan-key"),
-      testId: $(this).data("test-id")
-    }
+  if (!$('.aui-header-logo-bamboo').length) {
+    alert('You are not on the bamboo page =(');
+    return;
   }
-
+  
   var doRequests = function(action, tests) {
     var def = $.Deferred();
 
@@ -54,27 +52,32 @@
         );
       });
   }
+  
+  var quarantined, newfailed = [];
 
-  if (!$('.aui-header-logo-bamboo').length) {
-    alert('You are not on bamboo page =(');
-  } else if (window.location.pathname.match(/^\/browse\/[A-Z0-9-]+\/test$/)) {
-      var quarantined = $('td.actions a.quarantine-action.quarantined').map(mapEl).toArray()
-      var failed = $('td.actions a.quarantine-action:not(.quarantined)').map(mapEl).toArray()
+  $('td.actions').find('a.quarantine-action,a.unleash-test').each(function(){
+    var test = {
+      planKey: $(this).data("plan-key"),
+      testId: $(this).data("test-id"),
+    }
+    
+    if ($(this).hasClass('quarantined') || $(this).hasClass('unleash-test')) {
+      quarantined.push(test);
+    } else {
+      newfailed.push(test);
+    }
+  )
+  
+  if (!quarantined.length && !newfailed.length) {
+    alert('No tests found on this page');
+    return;
+  }
+    
+  if (newfailed.length > 0 && window.confirm('Found ' + failed.length + ' new failed test(s). Quarantine all?')) {
+    doRequests('quarantine', failed);
+  }
       
-      if (failed.length > 0 && window.confirm('Found ' + failed.length + ' new failed test(s). Quarantine all?')) {
-        doRequests('quarantine', failed);
-      }
-      
-      if (quarantined.length > 0 && window.confirm('Found ' + quarantined.length + ' quarantined test(s). Resume all?')) {
-        doRequests('unleash', quarantined);
-      }
-  } else if (window.location.pathname.match(/^\/browse\/[A-Z0-9-]+\/quarantine$/)) {
-      var quarantined = $('td.actions a.unleash-test').map(mapEl).toArray()
-      
-      if (quarantined.length > 0 && window.confirm('Found ' + quarantined.length + ' quarantined test(s). Resume all?')) {
-        doRequests('unleash', quarantined);
-      }
-  } else {
-    alert('Location ' + window.location.pathname + ' unsupported');
+  if (quarantined.length > 0 && window.confirm('Found ' + quarantined.length + ' quarantined test(s). Resume all?')) {
+    doRequests('unleash', quarantined);
   }
 })(jQuery);
