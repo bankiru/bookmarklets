@@ -139,8 +139,7 @@
       })
       .done(function(totalCount, resolvedCount, rejectedCount) {
         console.debug('DONE', arguments);
-        progressMsgEl.hide();
-        progressMsgEl.detach();
+        progress.remove();
 
         var msgText = AJS.format('<p>You should manually reload page to see changes!</p><p><a href="{0}">Reload</a></p>', window.location.href);
         if (rejectedCount > 0) {
