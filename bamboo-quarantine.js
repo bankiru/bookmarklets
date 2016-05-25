@@ -18,6 +18,44 @@
     return msg;
   }
   
+  var confirmDialog = function(title, body, buttons) {
+    var dialog = new AJS.Dialog({
+        width: 400,
+        height: 200,
+        id: 'bankiru-bookmarklets-bamboo-quarantine-confirm-dialog',
+        closeOnOutsideClick: true
+    });
+    
+    dialog.addHeader(title);
+    dialog.addPanel('Body', body, "panel-body");
+    
+    var cancelCallback = function(dialog) {
+        dialog.hide();
+        dialog.remove();
+    }
+    
+    jQuery.each(buttons, function(i, button){
+      if (typeof button == 'string') {
+        button = {title: button, callback: null, cssclass: null} 
+      }
+      
+      var callback = function (dialog) {
+        cancelCallback(dialog)
+        if (typeof button.callback == 'function') {
+          button.callback(button);
+        }
+      }
+      
+      dialog.addButton(button.title, callback, button.cssclass);
+    });
+
+    dialog.addCancel('Cancel', cancelCallback, '');
+    
+    dialog.show();
+    
+    return dialog;
+  }
+  
   var doRequests = function(action, tests) {
     var def = jQuery.Deferred();
 
@@ -94,7 +132,7 @@
     showMessage('warning', 'No tests found on this page!');
     return;
   }
-    
+  
   if (newfailed.length > 0 && window.confirm('Found ' + newfailed.length + ' new failed test(s). Quarantine all?')) {
     doRequests('quarantine', newfailed);
   }
@@ -102,4 +140,9 @@
   if (quarantined.length > 0 && window.confirm('Found ' + quarantined.length + ' quarantined test(s). Resume all?')) {
     doRequests('unleash', quarantined);
   }
+  
+  confirmDialog('Dialog title', 'Dialog body', [
+    {title: 'Button1', callback: function(){ alert('Button 1') }},
+    {title: 'Button2', callback: function(){ alert('Button 2') }},
+  ]);
 })(jQuery);
