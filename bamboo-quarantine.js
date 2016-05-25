@@ -66,7 +66,7 @@
     } else {
       newfailed.push(test);
     }
-  )
+  })
   
   if (!quarantined.length && !newfailed.length) {
     alert('No tests found on this page');
