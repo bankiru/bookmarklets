@@ -48,7 +48,10 @@
       })
       .done(function(totalCount, resolvedCount, rejectedCount) {
         console.debug('DONE', arguments);
-        alert("" + totalCount + " test(s) " + action + " finished.\n" + (rejectedCount > 0 ? 'Some api requests failed. See console log.' : ''));
+        alert("" + totalCount + " test(s) " + action + " finished.\n"
+              + (rejectedCount > 0 ? 'Some api requests failed. See console log.' : '') + "\n\n"
+              + "You should manually reload page to see changes!"
+        );
       });
   }
 
