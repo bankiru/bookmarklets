@@ -63,6 +63,12 @@
     var processedCount = 0;
     var resolvedCount = 0;
     var rejectedCount = 0;
+    
+    var progressMsgEl = showMessage(
+      'generic',
+      action.replace(/e$/, '') + 'ing progress',
+      AJS.format('<p><span class="value">{0}</span> of {1}</p>', 0, totalCount)
+    );
 
     jQuery.each(tests, function(i, test) {
       jQuery.ajax({
@@ -97,11 +103,14 @@
     })
 
     def
-      .progress(function() {
+      .progress(function(test, processedCount, totalCount) {
         console.debug('PROGRESS', arguments)
+        progressMsgEl.find('span.value').text(processedCount);
       })
       .done(function(totalCount, resolvedCount, rejectedCount) {
         console.debug('DONE', arguments);
+        progressMsgEl.hide();
+        progressMsgEl.detach();
 
         var msgText = '<p>You should manually reload page to see changes!</p>';
         if (rejectedCount > 0) {
