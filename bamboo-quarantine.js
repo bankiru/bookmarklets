@@ -133,16 +133,24 @@
     return;
   }
   
-  if (newfailed.length > 0 && window.confirm('Found ' + newfailed.length + ' new failed test(s). Quarantine all?')) {
-    doRequests('quarantine', newfailed);
+  var confirmText = '<p>Found</p>';
+  var buttons     = [];
+  
+  if (newfailed.length > 0) {
+    confirmText += AJS.format('<p>{0} new failed tests.</p>', newfailed.length);
+    buttons.push({
+      title: AJS.format('Quarantine {0} tests', newfailed.length),
+      callback: function(){ doRequests('quarantine', newfailed); }
+    });
   }
-      
-  if (quarantined.length > 0 && window.confirm('Found ' + quarantined.length + ' quarantined test(s). Resume all?')) {
-    doRequests('unleash', quarantined);
+
+  if (quarantined.length > 0) {
+    confirmText += AJS.format('<p>{0} quarantined tests.</p>', quarantined.length)  
+    buttons.push({
+      title: AJS.format('Unleash {0} tests', quarantined.length),
+      callback: function(){ doRequests('unleash', quarantined); }
+    });
   }
   
-  confirmDialog('Dialog title', 'Dialog body', [
-    {title: 'Button1', callback: function(){ alert('Button 1') }},
-    {title: 'Button2', callback: function(){ alert('Button 2') }},
-  ]);
+  confirmDialog('Tests found', confirmText, buttons);
 })(jQuery);
