@@ -4,6 +4,8 @@
     return;
   }
   
+  jQuery.getScript(AJS.format('//aui-cdn.atlassian.com/aui-adg/{0}/js/aui-experimental.js', AJS.version))
+  
   var showMessage = function(type, title, body) {
     var msg = AJS.messages[type]('#bankiru-bookmarklets-bamboo-quarantine', {
       title: title,
@@ -69,6 +71,10 @@
       action.replace(/e$/, '') + 'ing progress',
       AJS.format('<p><span class="value">{0}</span> of {1}</p>', 0, totalCount)
     );
+    
+    var updateProgress = AJS.debounce(function(processedCount){
+        progressMsgEl.find('span.value').text(processedCount);
+    }, 200)
 
     jQuery.each(tests, function(i, test) {
       jQuery.ajax({
@@ -104,8 +110,8 @@
 
     def
       .progress(function(test, processedCount, totalCount) {
-        console.debug('PROGRESS', arguments)
-        progressMsgEl.find('span.value').text(processedCount);
+        console.debug('PROGRESS', arguments);
+        updateProgress(processedCount);
       })
       .done(function(totalCount, resolvedCount, rejectedCount) {
         console.debug('DONE', arguments);
