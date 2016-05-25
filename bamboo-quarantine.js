@@ -53,7 +53,8 @@
       });
   }
   
-  var quarantined, newfailed = [];
+  var quarantined = [],
+      newfailed = [];
 
   $('td.actions').find('a.quarantine-action,a.unleash-test').each(function(){
     var test = {
