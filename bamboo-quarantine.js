@@ -72,9 +72,15 @@
         dataType:"json",
         data:"{}",
       })
-        .always(function() {
+        .always(function(_, state, _) {
           console.debug('ajax.always', arguments);
-          processedCount++;
+          ++processedCount;
+          if (state == 'success') {
+            ++resolvedCount;
+          }
+          if (state == 'error') {
+            ++rejectedCount;
+          }
 
           def.notify(test, processedCount, totalCount)
 
@@ -84,11 +90,9 @@
         })
         .fail(function(jqXHR, textStatus, errorThrown) {
           console.error('ajax.fail', arguments);
-          rejectedCount++;
         })
         .done(function(result) {
           console.debug('ajax.done', arguments);
-          resolvedCount++;
         })
     })
 
@@ -106,7 +110,7 @@
 
         showMessage(
           rejectedCount > 0 ? 'warning' : 'success',
-          AJS.format('Finished. {0} tests {1}', totalCount, action.replace(/e$/) + 'ed'),
+          AJS.format('Finished. {0} tests {1}', totalCount, action.replace(/e$/, '') + 'ed'),
           msgText
         );
       });
