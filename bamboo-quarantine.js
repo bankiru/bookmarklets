@@ -1,19 +1,33 @@
-(function($){
-  if (!$('.aui-header-logo-bamboo').length) {
+(function(jQuery){
+  if (!jQuery('.aui-header-logo-bamboo').length) {
     alert('You are not on the bamboo page =(');
     return;
   }
   
+  var showMessage = function(type, title, body) {
+    var msg = AJS.messages[type]('#bankiru-bookmarklets-bamboo-quarantine', {
+      title: title,
+      body: body,
+      closable: true,
+    });
+    
+    msg.css({width: '30em', right: '1em', top: '1em', position: 'absolute'});
+        
+    jQuery('section.aui-page-panel-content').append(msg);
+    
+    return msg;
+  }
+  
   var doRequests = function(action, tests) {
-    var def = $.Deferred();
+    var def = jQuery.Deferred();
 
     var totalCount = tests.length
     var processedCount = 0;
     var resolvedCount = 0;
     var rejectedCount = 0;
 
-    $.each(tests, function(i, test) {
-      $.ajax({
+    jQuery.each(tests, function(i, test) {
+      jQuery.ajax({
         url: window.location.origin + '/rest/api/latest/plan/' + test.planKey + '/test/' + test.testId + '/' + action,
         type:"POST",
         contentType:"application/json; charset=utf-8",
@@ -46,43 +60,37 @@
       })
       .done(function(totalCount, resolvedCount, rejectedCount) {
         console.debug('DONE', arguments);
-        
-        var msgConstructor = rejectedCount > 0 ? AJS.messages.warning : AJS.messages.success;
-        
+
         var msgText = '<p>You should manually reload page to see changes!</p>';
         if (rejectedCount > 0) {
           msgText = AJS.format('<p>{0} of {1} api requests failed. See console log for details.</p>', rejectedCount, totalCount) + msgText;
         }
-        
-        var msg = msgConstructor('section.aui-page-panel-content', {
-          title: AJS.format('Finished {0} tests {1}', totalCount, action),
-          body: msgText,
-          closable: true,
-        });
-        
-        msg.css({width: '30em', right: '1em', top: '1em', position: 'absolute'});
-        
-        $('section.aui-page-panel-content').append(msg);
+
+        showMessage(
+          rejectedCount > 0 ? 'warning' : 'success',
+          AJS.format('Finished {0} tests {1}', totalCount, action),
+          msgText
+        );
       });
   }
   
   var quarantined = [],
       newfailed = [];
 
-  $('td.actions').find('a.quarantine-action,a.unleash-test').each(function(){
+  jQuery('td.actions').find('a.quarantine-action,a.unleash-test').each(function(){
     var test = {
-      planKey: $(this).data("plan-key"),
-      testId: $(this).data("test-id"),
+      planKey: jQuery(this).data("plan-key"),
+      testId: jQuery(this).data("test-id"),
     }
     
-    if ($(this).hasClass('quarantined') || $(this).hasClass('unleash-test')) {
+    if (jQuery(this).hasClass('quarantined') || jQuery(this).hasClass('unleash-test')) {
       quarantined.push(test);
     } else {
       newfailed.push(test);
     }
   })
   
-  if (!quarantined.length && !newfailed.length) {
+  if (quarantined.length == 0 && newfailed.length == 0) {
     alert('No tests found on this page');
     return;
   }
