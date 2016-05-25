@@ -74,8 +74,8 @@
     return;
   }
     
-  if (newfailed.length > 0 && window.confirm('Found ' + failed.length + ' new failed test(s). Quarantine all?')) {
-    doRequests('quarantine', failed);
+  if (newfailed.length > 0 && window.confirm('Found ' + newfailed.length + ' new failed test(s). Quarantine all?')) {
+    doRequests('quarantine', newfailed);
   }
       
   if (quarantined.length > 0 && window.confirm('Found ' + quarantined.length + ' quarantined test(s). Resume all?')) {
