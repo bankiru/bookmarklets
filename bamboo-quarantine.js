@@ -63,13 +63,13 @@
       }
       
       if (quarantined.length > 0 && window.confirm('Found ' + quarantined.length + ' quarantined test(s). Resume all?')) {
-        doRequests('resume', quarantined);
+        doRequests('unleash', quarantined);
       }
   } else if (window.location.pathname.match(/^\/browse\/[A-Z0-9-]+\/quarantine$/)) {
       var quarantined = $('td.actions a.unleash-test').map(mapEl).toArray()
       
       if (quarantined.length > 0 && window.confirm('Found ' + quarantined.length + ' quarantined test(s). Resume all?')) {
-        doRequests('resume', quarantined);
+        doRequests('unleash', quarantined);
       }
   } else {
     alert('Location ' + window.location.pathname + ' unsupported');
