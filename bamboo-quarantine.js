@@ -91,7 +91,7 @@
   })
   
   if (quarantined.length == 0 && newfailed.length == 0) {
-    alert('No tests found on this page');
+    showMessage('warning', 'No tests found on this page!');
     return;
   }
     
