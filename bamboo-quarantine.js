@@ -26,7 +26,7 @@
           console.debug('ajax.always', arguments);
           processedCount++;
 
-          def.notify(arg, processedCount, totalCount)
+          def.notify(test, processedCount, totalCount)
 
           if (processedCount == totalCount) {
             def.resolve(totalCount, resolvedCount, rejectedCount);
