@@ -46,10 +46,21 @@
       })
       .done(function(totalCount, resolvedCount, rejectedCount) {
         console.debug('DONE', arguments);
-        alert("" + totalCount + " test(s) " + action + " finished.\n"
-              + (rejectedCount > 0 ? 'Some api requests failed. See console log.' : '') + "\n\n"
-              + "You should manually reload page to see changes!"
-        );
+        
+        var msgConstructor = rejectedCount > 0 ? AJS.messages.warning : AJS.messages.success;
+        
+        var msgText = '<p>You should manually reload page to see changes!</p>';
+        if (rejectedCount > 0) {
+          msgText = AJS.format('<p>{0} of {1} api requests failed. See console log for details.</p>', rejectedCount, totalCount) + msgText;
+        }
+        
+        $(msgConstructor("#bankiru-bookmarklets-bamoo-quarantine-message", {
+          title: AJS.format('Finished {0} tests {1}', totalCount, action),
+          body: msgText,
+          closable: true,
+        }))
+          .css({width: '30em', right: '1em', top: '1em', position: 'absolute'})
+          .appendTo('section.aui-page-panel-content');
       });
   }
   
