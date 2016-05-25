@@ -70,7 +70,7 @@
     var update
     
     if (aui_experimental_available) {
-      el = $(AJS.format('<div id="{0}" class="aui-progress-indicator"><span class="aui-progress-indicator-value"></span></div>', id));
+      el = jQuery(AJS.format('<div id="{0}" class="aui-progress-indicator"><span class="aui-progress-indicator-value"></span></div>', id));
       el.css({width: '30em', right: '1em', top: '1em', position: 'absolute'});
       jQuery('section.aui-page-panel-content').append(el);
 
