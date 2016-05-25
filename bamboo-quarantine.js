@@ -54,13 +54,13 @@
           msgText = AJS.format('<p>{0} of {1} api requests failed. See console log for details.</p>', rejectedCount, totalCount) + msgText;
         }
         
-        var msg = msgConstructor('#bankiru-bookmarklets-bamoo-quarantine-message', {
+        var msg = msgConstructor('section.aui-page-panel-content', {
           title: AJS.format('Finished {0} tests {1}', totalCount, action),
           body: msgText,
           closable: true,
         });
         
-        $(msg).css({width: '30em', right: '1em', top: '1em', position: 'absolute'});
+        msg.css({width: '30em', right: '1em', top: '1em', position: 'absolute'});
         
         $('section.aui-page-panel-content').append(msg);
       });
