@@ -1,6 +1,6 @@
-# kloaka
+# Banki.ru Bookmarklets
 
-## Bamboo quarantine/resume bookmarklet
+## Bamboo quarantine/resume
 
 Create in your browser new bookmark with next address:
 
