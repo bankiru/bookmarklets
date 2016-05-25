@@ -4,7 +4,11 @@
     return;
   }
   
-  jQuery.getScript(AJS.format('//aui-cdn.atlassian.com/aui-adg/{0}/js/aui-experimental.js', AJS.version))
+  var aui_experimental_available = typeof AJS.progressBars != 'undefined';
+  if (!aui_experimental_available) {
+    jQuery.getScript(AJS.format('//aui-cdn.atlassian.com/aui-adg/{0}/js/aui-experimental.js', AJS.version), function(){ aui_experimental_available = true; });
+    jQuery(AJS.format('<link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/{0}/css/aui-experimental.css"/>', AJS.version)).appendTo('head');
+  }
   
   var showMessage = function(type, title, body) {
     var msg = AJS.messages[type]('#bankiru-bookmarklets-bamboo-quarantine', {
@@ -58,6 +62,34 @@
     return dialog;
   }
   
+  var Progress = function(action, total, initial){
+    var id = 'bankiru-bookmarklets-bamboo-quarantine-progress-' + new Date().getTime();
+    var title = action.replace(/e$/, '') + 'ing progress'
+    
+    var el
+    var update
+    
+    if (aui_experimental_available) {
+      el = $(AJS.format('<div id="{0}" class="aui-progress-indicator"><span class="aui-progress-indicator-value"></span></div>', id));
+      el.css({width: '30em', right: '1em', top: '1em', position: 'absolute'});
+      jQuery('section.aui-page-panel-content').append(el);
+
+      AJS.progressBars.update('#' + id, Math.round(initial / total));
+    
+      update = function(value){ AJS.progressBars.update('#' + id, Math.round(value / total)); }
+    } else {
+      el = showMessage('generic', title, AJS.format('<p><span class="value">{0}</span> of {1}</p>', initial, total));
+      update = function(processedCount) { el.find('span.value').text(processedCount); }
+    }
+
+    this.update = AJS.debounce(update, 200);
+    
+    this.remove = function(){
+      el.detach();
+      el.remove();
+    }
+  }
+  
   var doRequests = function(action, tests) {
     var def = jQuery.Deferred();
 
@@ -66,16 +98,8 @@
     var resolvedCount = 0;
     var rejectedCount = 0;
     
-    var progressMsgEl = showMessage(
-      'generic',
-      action.replace(/e$/, '') + 'ing progress',
-      AJS.format('<p><span class="value">{0}</span> of {1}</p>', 0, totalCount)
-    );
+    var progress = new Progress(action, totalCount, processedCount);
     
-    var updateProgress = AJS.debounce(function(processedCount){
-        progressMsgEl.find('span.value').text(processedCount);
-    }, 200)
-
     jQuery.each(tests, function(i, test) {
       jQuery.ajax({
         url: window.location.origin + '/rest/api/latest/plan/' + test.planKey + '/test/' + test.testId + '/' + action,
@@ -111,7 +135,7 @@
     def
       .progress(function(test, processedCount, totalCount) {
         console.debug('PROGRESS', arguments);
-        updateProgress(processedCount);
+        progress.update(processedCount);
       })
       .done(function(totalCount, resolvedCount, rejectedCount) {
         console.debug('DONE', arguments);
