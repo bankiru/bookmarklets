@@ -74,9 +74,9 @@
       el.css({width: '30em', right: '1em', top: '1em', position: 'absolute'});
       jQuery('section.aui-page-panel-content').append(el);
 
-      AJS.progressBars.update('#' + id, Math.round(initial / total));
+      AJS.progressBars.update('#' + id, initial / total);
     
-      update = function(value){ AJS.progressBars.update('#' + id, Math.round(value / total)); }
+      update = function(value){ AJS.progressBars.update('#' + id, value / total); }
     } else {
       el = showMessage('generic', title, AJS.format('<p><span class="value">{0}</span> of {1}</p>', initial, total));
       update = function(processedCount) { el.find('span.value').text(processedCount); }
