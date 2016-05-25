@@ -106,7 +106,7 @@
 
         showMessage(
           rejectedCount > 0 ? 'warning' : 'success',
-          AJS.format('Finished {0} tests {1}', totalCount, action),
+          AJS.format('Finished. {0} tests {1}', totalCount, action.replace(/e$/) + 'ed'),
           msgText
         );
       });
@@ -133,11 +133,11 @@
     return;
   }
   
-  var confirmText = '<p>Found</p>';
+  var confirmText = '<p>Found:</p><ul>';
   var buttons     = [];
   
   if (newfailed.length > 0) {
-    confirmText += AJS.format('<p>{0} new failed tests.</p>', newfailed.length);
+    confirmText += AJS.format('<li>{0} new failed tests.</li>', newfailed.length);
     buttons.push({
       title: AJS.format('Quarantine {0} tests', newfailed.length),
       callback: function(){ doRequests('quarantine', newfailed); }
@@ -145,12 +145,14 @@
   }
 
   if (quarantined.length > 0) {
-    confirmText += AJS.format('<p>{0} quarantined tests.</p>', quarantined.length)  
+    confirmText += AJS.format('<li>{0} quarantined tests.</li>', quarantined.length)  
     buttons.push({
       title: AJS.format('Unleash {0} tests', quarantined.length),
       callback: function(){ doRequests('unleash', quarantined); }
     });
   }
+  
+  confirmText += '</ul>';
   
   confirmDialog('Tests found', confirmText, buttons);
 })(jQuery);
