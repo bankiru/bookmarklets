@@ -66,24 +66,18 @@
     var id = 'bankiru-bookmarklets-bamboo-quarantine-progress-' + new Date().getTime();
     var title = action.replace(/e$/, '') + 'ing progress'
     
-    var el
-    var update
-    
-    if (aui_experimental_available) {
-      el = jQuery(AJS.format('<div id="{0}" class="aui-progress-indicator"><span class="aui-progress-indicator-value"></span></div>', id));
-      el.css({width: '30em', right: '1em', top: '1em', position: 'absolute'});
-      jQuery('section.aui-page-panel-content').append(el);
+    var messageBody = aui_experimental_available
+      ? AJS.format('<div id="{1}" class="aui-progress-indicator"><span class="aui-progress-indicator-value"></span></div>', id)
+      : AJS.format('<p><span class="value">0</span> of {0}</p>', total);
 
-      AJS.progressBars.update('#' + id, initial / total);
+    var el = showMessage('generic', title, messageBody);
     
-      update = function(value){ AJS.progressBars.update('#' + id, value / total); }
-    } else {
-      el = showMessage('generic', title, AJS.format('<p><span class="value">{0}</span> of {1}</p>', initial, total));
-      update = function(processedCount) { el.find('span.value').text(processedCount); }
-    }
+    this.update = aui_experimental_available
+      ? function(value){ AJS.progressBars.update('#' + id, value / total); }
+      : function(value) { el.find('span.value').text(value); };
+    this.update = AJS.debounce(this.update, 200);
+    this.update(initial);
 
-    this.update = AJS.debounce(update, 200);
-    
     this.remove = function(){
       el.detach();
       el.remove();
