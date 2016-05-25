@@ -55,7 +55,7 @@
       });
   }
 
-  if (!$('.aui-header-logo-bamboo').length)) {
+  if (!$('.aui-header-logo-bamboo').length) {
     alert('You are not on bamboo page =(');
   } else if (window.location.pathname.match(/^\/browse\/[A-Z0-9-]+\/test$/)) {
       var quarantined = $('td.actions a.quarantine-action.quarantined').map(mapEl).toArray()
