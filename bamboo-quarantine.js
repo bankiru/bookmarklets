@@ -1,5 +1,5 @@
 (function(jQuery){
-  if (!jQuery('.aui-header-logo-bamboo').length) {
+  if (!jQuery || !jQuery('.aui-header-logo-bamboo').length) {
     alert('You are not on the bamboo page =(');
     return;
   }
